@@ -1,7 +1,7 @@
 import React from 'react'
 import Banner from '../../components/Banner'
 import Post from '../../components/Post'
-import AddPostForm from '../../components/AddPostForm'
+import PostForm from '../../components/PostForm'
 import NewPost from '../../components/NewPost'
 
 class Home extends React.Component {
@@ -27,10 +27,6 @@ class Home extends React.Component {
     this.setState({posts: this.state.posts});
   }
 
-  renderPost(key) {
-    return <NewPost key={key} index={key} deletePost={this.deletePost} details={this.state.posts[key]}/>
-  }
-
   deletePost(key) {
     delete this.state.posts[key];
     this.setState({
@@ -38,8 +34,21 @@ class Home extends React.Component {
     });
   }
 
-  editPost(key) {
+  editPost(key, data) {
+    this.state.posts[key] = data;
+    this.setState({
+      posts: this.state.posts
+    });
+  }
 
+  renderPost(key) {
+    return <NewPost
+        key={key}
+        index={key}
+        deletePost={this.deletePost}
+        editPost={this.editPost}
+        details={this.state.posts[key]}
+    />
   }
 
   render() {
@@ -68,7 +77,17 @@ class Home extends React.Component {
             <div className="list-of-posts">
               {Object.keys(this.state.posts).map(this.renderPost)}
             </div>
-            <AddPostForm addPost={this.addPost}/>
+            <PostForm
+                addPost={this.addPost}
+                title="Add a Post to the React Blog"
+                btn="Add Post"
+                fieldVal={{
+                  title: '',
+                  desc: '',
+                  name: '',
+                  image: '',
+                }}
+            />
           </div>
         </div>
     )
